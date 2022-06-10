@@ -1,0 +1,130 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <title>Document</title>
+
+    <!-- js -->
+<script type="text/javascript" src="https://www.kcookart.com/2019/common/js/jquery-1.8.3.min.js"></script>
+
+
+</head>
+<body >
+    
+    <div class="myElem">
+
+        
+    </div>
+
+
+
+    <form>
+
+        <input type="hidden" name="value1" id="value1" />
+        <input type="hidden" name="value3" id="value3" disabled />  <!-- value3은 사용안한다 -->
+
+        <ul class="csInt" id="csInt01">
+            <h5 style="padding-bottom:10px;font-size:15px;">자격증</h5>
+            <li><input type="checkbox" name="value3" onclick="value1_add(this);" id="int0101" value="한식기능사" /><label for="int0101">한식기능사</label></li>
+            <li><input type="checkbox" name="value3" onclick="value1_add(this);" id="int0102" value="양식기능사" /><label for="int0102">양식기능사</label></li>
+            <li><input type="checkbox" name="value3" onclick="value1_add(this);" id="int0103" value="일식기능사" /><label for="int0103">일식기능사</label></li>
+            <li><input type="checkbox" name="value3" onclick="value1_add(this);" id="int0104" value="중식기능사" /><label for="int0104">중식기능사</label></li>
+            <li><input type="checkbox" name="value3" onclick="value1_add(this);" id="int0105" value="복어기능사" /><label for="int0105">복어기능사</label></li>
+        </ul>
+    
+    
+        <div class="csCol3">
+            <dl class="csInput">
+                <dt>희망 교육과정</dt>
+                <dd>
+                    <ul class="csCurri">
+                        <p>희망하시는 교육과정을 선택해 주세요.</p>
+                    </ul>
+                    <div id="Div_Cousrse3"></div>
+                </dd>
+                <dt>교육 희망지점</dt>
+                <dd >
+                </dd>
+            </dl>
+        </div>
+
+    </form>
+
+    
+
+</body>
+
+</html>
+
+
+<script>
+    function value1_add(val){
+
+         /* 
+            name으로 받아오면 해당 체크박스를 배열로 받아 올 수 있다 
+            getElementById는 단일값으로 받는다.
+            getElementsByName 그래서s가 붙음
+            str[0]
+         */
+		let str = document.getElementsByName("value1")[0]; 
+
+
+
+		if (document.getElementsByName("value3").length > 1){  // 체크박스의 길이가 1개 보다 많으면?
+
+
+			if(val.checked == true){   // 함수의 체크값이 ture일 경우 
+
+				str.value = str.value == '' ? val.value : str.value +', '+ val.value; // 값을 추가해라 value1 배열에 값이 없을 경우 val.value 추가 있을 경우 + val.value 추가
+
+				$('.csCurri').append("<li intNum='"+val.id+"'>"+val.value+"<label for='"+val.id+"'>Del</label></li>");  // 단일값 체크하기 위해  intNum='"+val.id+"' 속성추가
+				$('.csCurri p').hide();  // 희망하시는 교육과정을 선택해주세요 멘트 숨김
+			} else {  
+                //false 일경우 (체크를 뺏을 경우)
+				let vayStr = str.value.split(", ");  // string.split(separator, maxsplit) 문자열 나누는 함수 기본값은 whitespace  ,로 설정시 ,기준으로 분할
+
+
+
+                /* 모든 단어 사라졌을 경우 멘트 추가 요소 */
+				if (vayStr.length == 1 ){   // 저장된 단어가 1개 일 경우
+				
+					str.value = str.value.replace(vayStr[0],""); // 한개 남았을 경우 삭제 해라
+					$('.csCurri li[intNum='+val.id+']').remove();		// 체크 푼 해당 intNum='+val.id+'를 제거해라
+					$('.csCurri p').show();  // 저장된 단어가 없으니 멘트 노출
+
+				} else {	
+                    
+                    /* value1 의 값의 단어가 1개 이상일 경우 */
+
+					for (let i = 0; i < vayStr.length; i ++ ){  // 배열의 숫자 만큼 반복 해라
+
+						if (vayStr[i] == val.value){  // 배열에 저장된 값과 현재 클릭한 함수의 value 값이 같은 경우 아래 실행 하라		
+
+							if (i == 0 ){					
+								str.value = str.value.replace(vayStr[i]+", ",""); // 0번째 배열일 경우 뒤에 컴마도 같이 삭제
+								$('.csCurri li[intNum='+val.id+']').remove(); // 추가된 li도 삭제
+								
+							} else {	// 0번 이상 배열일경우
+								str.value = str.value.replace(", "+vayStr[i],""); // 앞 컴마와 문자삭제
+								$('.csCurri li[intNum='+val.id+']').remove(); // 추가된 li도 삭제
+							}
+						}
+					}					
+				}
+			}
+		}
+
+
+   // document.getElementById("Div_Cousrse3").innerHTML = "";
+
+		
+	};
+
+
+</script>
